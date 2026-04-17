@@ -1,10 +1,15 @@
-"""Load configuration from .env and expose as module-level constants."""
+"""Load configuration from .env.local / .env and expose as module-level constants."""
 from __future__ import annotations
 
 import os
+from pathlib import Path
+
 from dotenv import load_dotenv
 
-load_dotenv()
+_BASE = Path(__file__).resolve().parent
+# .env.local takes precedence; .env is the fallback. Neither overrides real env vars.
+load_dotenv(_BASE / ".env.local")
+load_dotenv(_BASE / ".env")
 
 
 def _required(name: str) -> str:
