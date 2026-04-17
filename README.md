@@ -54,6 +54,125 @@ python main.py
 
 Then in Telegram, send the bot a URL. That's it.
 
+## Multi-Machine Use
+
+The cleanest way to use this project across a Windows machine and a Mac mini is:
+
+- Keep the code in GitHub.
+- Keep `.env.local` local to each machine.
+- Recreate `.venv` separately on each machine from `requirements.txt`.
+- Run only one active bot instance at a time for the same Telegram bot token.
+
+Why this is the right split:
+
+- `.venv` is machine-specific and should not be copied between Windows and macOS.
+- `.env.local` contains secrets and is already excluded from git.
+- Git stays the source of truth for code, while each machine keeps its own runtime state.
+
+Recommended workflow:
+
+1. Edit and test on Windows.
+2. Push changes to GitHub.
+3. Pull changes on the Mac mini.
+4. Restart the bot on the Mac mini.
+
+Important:
+
+- Do not run the same Telegram bot on both machines at once.
+- This bot uses long polling, so concurrent runs with the same token can conflict.
+
+## Mac Mini Setup
+
+If the repo is not already on the Mac mini:
+
+```bash
+git clone <your-repo-url>
+cd LinkToNotion
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env.local
+python main.py
+```
+
+If the repo already exists on the Mac mini:
+
+```bash
+cd LinkToNotion
+git pull
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python main.py
+```
+
+## Mac Launchd
+
+If the Mac mini is your always-on host, use `launchd` so the bot starts automatically after reboot.
+
+Create `~/Library/LaunchAgents/com.stevie.linktonotion.plist` with this content:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.stevie.linktonotion</string>
+
+    <key>ProgramArguments</key>
+    <array>
+      <string>/Users/YOUR_USER/LinkToNotion/.venv/bin/python</string>
+      <string>/Users/YOUR_USER/LinkToNotion/main.py</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/YOUR_USER/LinkToNotion</string>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/YOUR_USER/Library/Logs/LinkToNotion.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/Users/YOUR_USER/Library/Logs/LinkToNotion.err.log</string>
+  </dict>
+</plist>
+```
+
+Replace `YOUR_USER` with your macOS username.
+
+Load it:
+
+```bash
+launchctl load ~/Library/LaunchAgents/com.stevie.linktonotion.plist
+launchctl start com.stevie.linktonotion
+```
+
+Check logs:
+
+```bash
+tail -f ~/Library/Logs/LinkToNotion.log
+tail -f ~/Library/Logs/LinkToNotion.err.log
+```
+
+If you update the plist later:
+
+```bash
+launchctl unload ~/Library/LaunchAgents/com.stevie.linktonotion.plist
+launchctl load ~/Library/LaunchAgents/com.stevie.linktonotion.plist
+```
+
+## Security
+
+Do not email or commit `.env.local`.
+
+If secrets were pasted into chat logs or other places you do not fully control, rotate them.
+
 ## Structure
 
 ```
