@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import html
 import logging
+import re
 import smtplib
 from email.message import EmailMessage
 from typing import Any
@@ -13,6 +14,13 @@ log = logging.getLogger(__name__)
 
 SMTP_HOST = "smtp.gmail.com"
 SMTP_PORT = 465  # SSL
+
+
+def _parse_recipients(value: str) -> list[str]:
+    recipients = [part.strip() for part in re.split(r"[;,]", value) if part.strip()]
+    if not recipients:
+        raise ValueError("EMAIL_TO did not contain any recipient addresses")
+    return recipients
 
 
 def _render_plain(lesson: dict[str, Any], source_url: str, notion_url: str) -> str:
@@ -103,9 +111,11 @@ def _render_html(lesson: dict[str, Any], source_url: str, notion_url: str) -> st
 
 
 def send_lesson_email(lesson: dict[str, Any], source_url: str, notion_url: str) -> None:
+    recipients = _parse_recipients(config.EMAIL_TO)
+
     msg = EmailMessage()
     msg["From"] = config.GMAIL_USER
-    msg["To"] = config.EMAIL_TO
+    msg["To"] = ", ".join(recipients)
     msg["Subject"] = f"[Lesson] {lesson['title']}"
 
     msg.set_content(_render_plain(lesson, source_url, notion_url))
@@ -113,6 +123,6 @@ def send_lesson_email(lesson: dict[str, Any], source_url: str, notion_url: str) 
 
     with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT, timeout=30) as smtp:
         smtp.login(config.GMAIL_USER, config.GMAIL_APP_PASSWORD)
-        smtp.send_message(msg)
+        smtp.send_message(msg, to_addrs=recipients)
 
-    log.info("Email sent to %s", config.EMAIL_TO)
+    log.info("Email sent to %s", ", ".join(recipients))
