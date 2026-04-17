@@ -63,7 +63,7 @@ def generate_lesson(url: str, source_type: str, content: str) -> dict[str, Any]:
 
     response = _client.chat.completions.create(
         model=config.OPENAI_MODEL,
-        max_tokens=4096,
+        max_completion_tokens=4096,
         response_format={"type": "json_object"},
         messages=[
             {"role": "system", "content": SYSTEM_PROMPT},
