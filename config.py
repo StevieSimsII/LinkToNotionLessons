@@ -18,9 +18,9 @@ def _required(name: str) -> str:
 TELEGRAM_BOT_TOKEN = _required("TELEGRAM_BOT_TOKEN")
 ALLOWED_TELEGRAM_USER_ID = int(_required("ALLOWED_TELEGRAM_USER_ID"))
 
-# Anthropic
-ANTHROPIC_API_KEY = _required("ANTHROPIC_API_KEY")
-ANTHROPIC_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-6")
+# OpenAI
+OPENAI_API_KEY = _required("OPENAI_API_KEY")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o")
 
 # Notion
 NOTION_API_KEY = _required("NOTION_API_KEY")

@@ -1,4 +1,4 @@
-"""Anthropic Claude client — turns raw fetched content into a structured lesson."""
+"""OpenAI GPT client — turns raw fetched content into a structured lesson."""
 from __future__ import annotations
 
 import json
@@ -6,13 +6,13 @@ import logging
 import re
 from typing import Any
 
-from anthropic import Anthropic
+from openai import OpenAI
 
 import config
 
 log = logging.getLogger(__name__)
 
-_client = Anthropic(api_key=config.ANTHROPIC_API_KEY)
+_client = OpenAI(api_key=config.OPENAI_API_KEY)
 
 SYSTEM_PROMPT = """You are an expert technical educator. You take raw content from a web \
 article or a GitHub repository and transform it into a structured, self-contained \
@@ -46,14 +46,13 @@ def _extract_json(text: str) -> dict[str, Any]:
     """Be forgiving if the model wraps the JSON in ```json fences."""
     stripped = text.strip()
     if stripped.startswith("```"):
-        # Strip opening fence line
         stripped = re.sub(r"^```(?:json)?\s*", "", stripped)
         stripped = re.sub(r"\s*```\s*$", "", stripped)
     return json.loads(stripped)
 
 
 def generate_lesson(url: str, source_type: str, content: str) -> dict[str, Any]:
-    """Call Claude and return the parsed lesson dict."""
+    """Call OpenAI and return the parsed lesson dict."""
     user_message = (
         f"Source URL: {url}\n"
         f"Source type: {source_type}\n\n"
@@ -62,33 +61,25 @@ def generate_lesson(url: str, source_type: str, content: str) -> dict[str, Any]:
         "Produce the lesson JSON now."
     )
 
-    response = _client.messages.create(
-        model=config.ANTHROPIC_MODEL,
+    response = _client.chat.completions.create(
+        model=config.OPENAI_MODEL,
         max_tokens=4096,
-        system=[
-            {
-                "type": "text",
-                "text": SYSTEM_PROMPT,
-                # Cache the static system prompt across calls — system prompt is identical
-                # for every lesson request, so we get a hit after the first call.
-                "cache_control": {"type": "ephemeral"},
-            }
+        response_format={"type": "json_object"},
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": user_message},
         ],
-        messages=[{"role": "user", "content": user_message}],
     )
 
-    # Concatenate all text blocks in the response.
-    raw = "".join(block.text for block in response.content if block.type == "text")
-    log.debug("Claude raw response: %s", raw[:500])
+    raw = response.choices[0].message.content or ""
+    log.debug("OpenAI raw response: %s", raw[:500])
 
     lesson = _extract_json(raw)
-    # Minimal validation — raise early if the model skipped required fields.
     required = ("title", "overview", "key_concepts", "how_it_works", "training_exercise")
     missing = [k for k in required if not lesson.get(k)]
     if missing:
         raise ValueError(f"Lesson JSON missing required fields: {missing}")
 
-    # Normalize optional fields
     lesson.setdefault("tags", [])
     lesson.setdefault("further_reading", [])
     return lesson

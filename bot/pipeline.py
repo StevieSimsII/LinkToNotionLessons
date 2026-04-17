@@ -8,7 +8,7 @@ import config
 from email_notifier.gmail import send_lesson_email
 from fetchers.github import fetch_github_repo, is_github_url
 from fetchers.web import fetch_article
-from llm.claude import generate_lesson
+from llm.gpt import generate_lesson
 from notionapi.client import create_lesson_page
 
 log = logging.getLogger(__name__)
@@ -29,7 +29,7 @@ def process_link(url: str) -> dict:
     """Full pipeline. Returns {title, notion_url, emailed_to}."""
     source_type, content = _fetch(url)
 
-    log.info("Generating lesson with Claude (source=%s, chars=%d)", source_type, len(content))
+    log.info("Generating lesson with OpenAI (source=%s, chars=%d)", source_type, len(content))
     lesson = generate_lesson(url=url, source_type=source_type, content=content)
 
     log.info("Creating Notion page: %s", lesson["title"])

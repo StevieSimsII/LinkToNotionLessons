@@ -6,7 +6,7 @@ A personal Telegram bot that turns links (articles or GitHub repos) into structu
 
 1. You send a URL to your Telegram bot.
 2. The bot fetches the content — README + repo structure for GitHub, article text for the web.
-3. Claude turns it into a structured lesson: *Overview · Key Concepts · How It Works · Training Exercise · Further Reading*.
+3. OpenAI turns it into a structured lesson: *Overview · Key Concepts · How It Works · Training Exercise · Further Reading*.
 4. A new Notion page is created under your configured parent page.
 5. The bot replies on Telegram with the Notion URL.
 6. You receive an email with the full lesson body.
@@ -30,7 +30,7 @@ pip install -r requirements.txt
 
 - **Telegram bot token** — message [@BotFather](https://t.me/BotFather), run `/newbot`, copy the token.
 - **Your Telegram user ID** — message [@userinfobot](https://t.me/userinfobot). This is used to lock the bot to only you.
-- **Anthropic API key** — https://console.anthropic.com/
+- **OpenAI API key** — https://platform.openai.com/api-keys
 - **Notion integration** —
   1. Create an internal integration at https://www.notion.so/my-integrations
   2. Copy the Internal Integration Secret.
@@ -67,7 +67,7 @@ LinkToNotion/
 │   ├── web.py              # Generic article fetcher
 │   └── github.py           # GitHub repo fetcher
 ├── llm/
-│   └── claude.py           # Anthropic client — structured lesson generation
+│   └── gpt.py              # OpenAI client — structured lesson generation
 ├── notionapi/
 │   └── client.py           # Notion page creation
 └── email_notifier/
