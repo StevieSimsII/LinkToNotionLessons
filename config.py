@@ -38,4 +38,6 @@ EMAIL_TO = os.getenv("EMAIL_TO", "")
 
 # GitHub
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN") or None
-SECOND_BRAIN_GITHUB_TOKEN = _required("SECOND_BRAIN_GITHUB_TOKEN")
+SECOND_BRAIN_GITHUB_TOKEN = os.getenv("SECOND_BRAIN_GITHUB_TOKEN") or _required(
+    "GITHUB_TOKEN"
+)
