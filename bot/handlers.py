@@ -56,8 +56,7 @@ async def handle_url(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
         return
 
     await update.message.reply_text(
-        f"Done.\n\n*{result['title']}*\nNotion: {result['notion_url']}\n"
+        f"Done.\n\n{result['title']}\nNotion: {result['notion_url']}\n"
         f"Site: {result['site_url']}",
-        parse_mode="Markdown",
         disable_web_page_preview=False,
     )
