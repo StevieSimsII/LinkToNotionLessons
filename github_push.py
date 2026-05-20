@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 import requests
 
 import config
+from markdown_normalizer import normalize_page_markdown
 
 log = logging.getLogger(__name__)
 
@@ -32,6 +33,13 @@ def push_wiki_page(lesson: dict, *, source_url: str) -> str:
     date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     markdown = lesson_to_wiki_markdown(
         lesson, source_url=source_url, personal_notes="", date=date
+    )
+    markdown = normalize_page_markdown(
+        markdown,
+        fallback_title=lesson.get("title", "Untitled"),
+        fallback_source=source_url,
+        fallback_date=date,
+        fallback_tags=lesson.get("tags", []),
     )
 
     slug = f"{date}-{_slugify(lesson.get('title', 'untitled'))}"
