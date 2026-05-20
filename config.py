@@ -19,9 +19,9 @@ def _required(name: str) -> str:
     return value
 
 
-# Telegram
-TELEGRAM_BOT_TOKEN = _required("TELEGRAM_BOT_TOKEN")
-ALLOWED_TELEGRAM_USER_ID = int(_required("ALLOWED_TELEGRAM_USER_ID"))
+# Telegram (only required when running main.py / the bot)
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
+ALLOWED_TELEGRAM_USER_ID = int(os.getenv("ALLOWED_TELEGRAM_USER_ID", "0"))
 
 # OpenAI
 OPENAI_API_KEY = _required("OPENAI_API_KEY")
@@ -31,10 +31,11 @@ OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o")
 NOTION_API_KEY = _required("NOTION_API_KEY")
 NOTION_PARENT_PAGE_ID = _required("NOTION_PARENT_PAGE_ID")
 
-# Gmail
-GMAIL_USER = _required("GMAIL_USER")
-GMAIL_APP_PASSWORD = _required("GMAIL_APP_PASSWORD")
-EMAIL_TO = _required("EMAIL_TO")
+# Gmail (only required when running main.py / the bot)
+GMAIL_USER = os.getenv("GMAIL_USER", "")
+GMAIL_APP_PASSWORD = os.getenv("GMAIL_APP_PASSWORD", "")
+EMAIL_TO = os.getenv("EMAIL_TO", "")
 
-# GitHub (optional)
+# GitHub
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN") or None
+SECOND_BRAIN_GITHUB_TOKEN = _required("SECOND_BRAIN_GITHUB_TOKEN")
