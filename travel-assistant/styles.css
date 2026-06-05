@@ -1,0 +1,614 @@
+:root {
+  color-scheme: light;
+  --ink: #17211f;
+  --muted: #697570;
+  --line: #dbe2de;
+  --panel: #ffffff;
+  --canvas: #f4f7f2;
+  --soft: #edf4ef;
+  --accent: #0d6b64;
+  --accent-strong: #094f4a;
+  --accent-soft: #dff2ef;
+  --clay: #bd6544;
+  --blue: #345f8f;
+  --gold: #b38422;
+  --danger: #b54444;
+  --shadow: 0 20px 55px rgba(35, 48, 42, 0.12);
+  --radius: 8px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  height: 100vh;
+  padding: 22px;
+  border-right: 1px solid var(--line);
+  background: #fbfcf9;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-mark {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.brand strong,
+.brand small {
+  display: block;
+}
+
+.brand small,
+.nav-heading,
+.eyebrow,
+.metric span,
+.panel-header p,
+.empty-state span,
+.meta,
+label {
+  color: var(--muted);
+}
+
+.nav-heading {
+  margin-bottom: 10px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.trip-list {
+  min-height: 0;
+  overflow: auto;
+}
+
+.trip-button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+}
+
+.trip-button + .trip-button {
+  margin-top: 8px;
+}
+
+.trip-button strong,
+.trip-button span {
+  display: block;
+}
+
+.trip-button span {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.trip-button.active {
+  border-color: #c6d8d1;
+  background: var(--soft);
+}
+
+.sidebar-footer {
+  display: grid;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.workspace {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+  padding: 24px;
+}
+
+.topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.topbar h1 {
+  max-width: 780px;
+  margin: 2px 0 0;
+  font-size: clamp(1.55rem, 2.6vw, 2.35rem);
+  line-height: 1.06;
+  letter-spacing: 0;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.77rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.topbar-actions,
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.primary-action,
+.secondary-button,
+.ghost-button,
+.file-button {
+  min-height: 42px;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  padding: 10px 14px;
+  font-weight: 750;
+}
+
+.primary-action {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.primary-action:hover {
+  background: var(--accent-strong);
+}
+
+.secondary-button {
+  border-color: #c9d8d1;
+  background: #ffffff;
+  color: var(--ink);
+}
+
+.secondary-button:hover,
+.ghost-button:hover {
+  border-color: var(--accent);
+}
+
+.ghost-button {
+  border-color: var(--line);
+  background: transparent;
+  color: var(--ink);
+}
+
+.ghost-button.danger {
+  color: var(--danger);
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.metric,
+.panel {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  box-shadow: 0 1px 0 rgba(17, 24, 20, 0.02);
+}
+
+.metric {
+  min-width: 0;
+  padding: 16px;
+}
+
+.metric span,
+.metric strong {
+  display: block;
+}
+
+.metric strong {
+  overflow-wrap: anywhere;
+  margin-top: 8px;
+  font-size: 1.05rem;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(320px, 0.7fr);
+  gap: 18px;
+}
+
+.split-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.panel {
+  min-width: 0;
+  padding: 18px;
+}
+
+.panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.panel-header p {
+  margin: 5px 0 0;
+  line-height: 1.45;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.form-grid.tight {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+label {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #cfd8d2;
+  border-radius: var(--radius);
+  background: #ffffff;
+  color: var(--ink);
+  padding: 10px 11px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 3px solid rgba(13, 107, 100, 0.16);
+  border-color: var(--accent);
+}
+
+.trip-form,
+.stacked-form {
+  display: grid;
+  gap: 14px;
+}
+
+.inline-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.task-list,
+.booking-list,
+.day-list {
+  display: grid;
+  gap: 10px;
+}
+
+.inline-form + .task-list,
+.stacked-form + .booking-list,
+.stacked-form + .day-list {
+  margin-top: 16px;
+}
+
+.task,
+.booking,
+.day-card,
+.empty-state {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fbfcf9;
+}
+
+.task,
+.booking {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+}
+
+.task strong,
+.booking strong {
+  display: block;
+}
+
+.task .meta,
+.booking .meta {
+  margin-top: 4px;
+}
+
+.status-pill {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  padding: 5px 9px;
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.destination-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  gap: 14px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.destination-card {
+  overflow: hidden;
+  min-width: 220px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #ffffff;
+}
+
+.destination-media {
+  position: relative;
+  height: 128px;
+  background-color: #d7dfd8;
+  background-position: center;
+  background-size: cover;
+}
+
+.fit-badge {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--accent-strong);
+  padding: 5px 9px;
+  font-size: 0.76rem;
+  font-weight: 850;
+}
+
+.destination-body {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+}
+
+.destination-body h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.destination-body p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.42;
+}
+
+.tag-row,
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.tag,
+.fact {
+  border-radius: 999px;
+  background: #f1f4ef;
+  color: #43504b;
+  padding: 5px 8px;
+  font-size: 0.75rem;
+  font-weight: 750;
+}
+
+.fact {
+  background: #eef4f7;
+  color: var(--blue);
+}
+
+.day-card {
+  padding: 14px;
+}
+
+.day-card h3 {
+  margin: 0 0 12px;
+  font-size: 0.98rem;
+}
+
+.itinerary-item {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+}
+
+.itinerary-item time {
+  color: var(--accent-strong);
+  font-weight: 850;
+}
+
+.itinerary-item strong,
+.itinerary-item span {
+  display: block;
+}
+
+.itinerary-item span {
+  margin-top: 3px;
+  color: var(--muted);
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.photo-card {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #ffffff;
+}
+
+.photo-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.photo-card span {
+  display: block;
+  padding: 9px;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.file-button {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  border-color: #c9d8d1;
+  background: #ffffff;
+  color: var(--ink);
+}
+
+.file-button input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.empty-state {
+  display: grid;
+  gap: 4px;
+  padding: 18px;
+  text-align: center;
+}
+
+.toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 10;
+  max-width: min(360px, calc(100vw - 40px));
+  border: 1px solid #bdd3cb;
+  border-radius: var(--radius);
+  background: #ffffff;
+  box-shadow: var(--shadow);
+  padding: 12px 14px;
+  color: var(--ink);
+  font-weight: 750;
+}
+
+@media (max-width: 1120px) {
+  .summary-grid,
+  .destination-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .content-grid,
+  .split-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .workspace {
+    padding: 16px;
+  }
+
+  .topbar {
+    display: grid;
+  }
+
+  .summary-grid,
+  .form-grid,
+  .form-grid.tight,
+  .destination-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-header,
+  .task,
+  .booking {
+    display: grid;
+  }
+
+  .inline-form {
+    grid-template-columns: 1fr;
+  }
+}

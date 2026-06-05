@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Wayfinder Travel Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <span class="brand-mark">W</span>
+          <div>
+            <strong>Wayfinder</strong>
+            <small>Personal travel desk</small>
+          </div>
+        </div>
+
+        <button class="primary-action" id="newTripButton" type="button">New trip</button>
+
+        <nav class="trip-list" aria-label="Trips">
+          <div class="nav-heading">Trips</div>
+          <div id="tripList"></div>
+        </nav>
+
+        <div class="sidebar-footer">
+          <button class="ghost-button" id="seedButton" type="button">Restore demo data</button>
+          <button class="ghost-button danger" id="clearButton" type="button">Clear local data</button>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow" id="tripStatus">Planning</p>
+            <h1 id="tripTitle">Trip workspace</h1>
+          </div>
+          <div class="topbar-actions">
+            <button class="secondary-button" id="exportButton" type="button">Export calendar</button>
+            <button class="secondary-button" id="saveButton" type="button">Save</button>
+          </div>
+        </header>
+
+        <section class="summary-grid" aria-label="Trip summary">
+          <article class="metric">
+            <span>Dates</span>
+            <strong id="summaryDates">-</strong>
+          </article>
+          <article class="metric">
+            <span>Travelers</span>
+            <strong id="summaryTravelers">-</strong>
+          </article>
+          <article class="metric">
+            <span>Budget</span>
+            <strong id="summaryBudget">-</strong>
+          </article>
+          <article class="metric">
+            <span>Next up</span>
+            <strong id="summaryNext">-</strong>
+          </article>
+        </section>
+
+        <section class="content-grid">
+          <form class="panel trip-form" id="tripForm">
+            <div class="panel-header">
+              <div>
+                <h2>Trip brief</h2>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <label>
+                Trip name
+                <input id="tripName" name="name" type="text" required>
+              </label>
+              <label>
+                Home base
+                <input id="homeBase" name="homeBase" type="text" required>
+              </label>
+              <label>
+                Start
+                <input id="startDate" name="startDate" type="date" required>
+              </label>
+              <label>
+                End
+                <input id="endDate" name="endDate" type="date" required>
+              </label>
+              <label>
+                Adults
+                <input id="adults" name="adults" type="number" min="1" value="2" required>
+              </label>
+              <label>
+                Max travel time
+                <input id="maxTravelHours" name="maxTravelHours" type="number" min="1" value="10" required>
+              </label>
+              <label>
+                Budget
+                <input id="budget" name="budget" type="number" min="0" step="100" required>
+              </label>
+              <label>
+                Status
+                <select id="status" name="status">
+                  <option>Idea</option>
+                  <option>Planning</option>
+                  <option>Booked</option>
+                  <option>Active</option>
+                  <option>Archived</option>
+                </select>
+              </label>
+            </div>
+
+            <label>
+              Notes
+              <textarea id="notes" name="notes" rows="4"></textarea>
+            </label>
+
+            <div class="button-row">
+              <button class="primary-action" type="submit">Save brief</button>
+              <button class="secondary-button" id="buildItineraryButton" type="button">Build itinerary</button>
+            </div>
+          </form>
+
+          <aside class="panel command-panel">
+            <div class="panel-header">
+              <div>
+                <h2>Assistant queue</h2>
+              </div>
+            </div>
+            <form id="taskForm" class="inline-form">
+              <input id="taskInput" type="text" placeholder="Prepare a dinner shortlist in Banff">
+              <button class="secondary-button" type="submit">Add</button>
+            </form>
+            <div id="taskList" class="task-list"></div>
+          </aside>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Explore options</h2>
+            </div>
+            <button class="secondary-button" id="refreshIdeasButton" type="button">Refresh ideas</button>
+          </div>
+          <div class="destination-grid" id="destinationGrid"></div>
+        </section>
+
+        <section class="split-grid">
+          <article class="panel">
+            <div class="panel-header">
+              <div>
+                <h2>Itinerary</h2>
+              </div>
+            </div>
+            <form id="itineraryForm" class="stacked-form">
+              <div class="form-grid tight">
+                <label>
+                  Date
+                  <input id="itemDate" type="date" required>
+                </label>
+                <label>
+                  Time
+                  <input id="itemTime" type="time" required>
+                </label>
+                <label>
+                  Title
+                  <input id="itemTitle" type="text" required placeholder="Lake Louise reservation">
+                </label>
+                <label>
+                  Place
+                  <input id="itemPlace" type="text" placeholder="Banff, AB">
+                </label>
+              </div>
+              <button class="secondary-button" type="submit">Add itinerary item</button>
+            </form>
+            <div id="itineraryDays" class="day-list"></div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-header">
+              <div>
+                <h2>Bookings</h2>
+              </div>
+            </div>
+            <form id="bookingForm" class="stacked-form">
+              <div class="form-grid tight">
+                <label>
+                  Type
+                  <select id="bookingType">
+                    <option>Flight</option>
+                    <option>Hotel</option>
+                    <option>Rental car</option>
+                    <option>Restaurant</option>
+                    <option>Excursion</option>
+                    <option>Other</option>
+                  </select>
+                </label>
+                <label>
+                  Date
+                  <input id="bookingDate" type="date" required>
+                </label>
+                <label>
+                  Name
+                  <input id="bookingName" type="text" required placeholder="Fairmont Banff Springs">
+                </label>
+                <label>
+                  Cost
+                  <input id="bookingCost" type="number" min="0" step="1" placeholder="0">
+                </label>
+              </div>
+              <label>
+                Confirmation or notes
+                <textarea id="bookingNotes" rows="3" placeholder="Expedia, hotel, flight, or reservation details"></textarea>
+              </label>
+              <button class="secondary-button" type="submit">Add booking</button>
+            </form>
+            <div id="bookingList" class="booking-list"></div>
+          </article>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2>Trip photos</h2>
+            </div>
+            <label class="file-button">
+              Add photos
+              <input id="photoInput" type="file" accept="image/*" multiple>
+            </label>
+          </div>
+          <div id="photoGrid" class="photo-grid"></div>
+        </section>
+      </main>
+    </div>
+
+    <template id="emptyStateTemplate">
+      <div class="empty-state">
+        <strong>No items yet</strong>
+        <span>Waiting for trip details.</span>
+      </div>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>
