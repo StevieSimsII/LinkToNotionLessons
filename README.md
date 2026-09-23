@@ -1,5 +1,12 @@
 # LinkToNotion
 
+> **Retired.** Link capture now runs from the [Second_Brain](https://github.com/StevieSimsII/Second_Brain)
+> repository (`python -m ingest`), which publishes Markdown lessons to the
+> [Second Brain site](https://steviesimsii.github.io/Second_Brain/). New features (YouTube
+> length/channel metadata, TL;DR and key takeaways, timestamped key moments, and the
+> learning-time dashboard) live there. This repo is kept for history only; do not run
+> both bots against the same Telegram token.
+
 A personal Telegram bot that turns links (articles or GitHub repos) into structured Notion lessons and emails them to you.
 
 ## Flow
